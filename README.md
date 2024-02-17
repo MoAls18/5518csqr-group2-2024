@@ -10,12 +10,24 @@ Our application uses the three-tier architecture model. The layers consist of th
   - Contains HTML and CSS for displaying the user interface
   - Contains the code to display web pages to the user
   - Gathers data through API calls to the Business Logic Layer
-3. Business Logic Layer (BLL)
+2. Business Logic Layer (BLL)
   - Processes and manipulates data taken from the Data Access Layer
   - Controllers take input from the PL and process the input
   - Services contain the app logic such as creating new blog posts
   - Validators validate input before displaying or storing in the database
-4. Data Access Layer
+3. Data Access Layer
+  - The Data Access Layer interfaces with the database and the BLL
+  - Models contains data structures representing database entities
+  - Repositories interact with the database during retrieval and storage of data.
+
+## Secure Software Development
+Our blog app also includes secure software development techniques to maintain the security and integrity of the data. It includes:
+
+  - Input Validation
+  - Authentication and Authorization
+  - Data Encryption
+  - Session Management
+  - Error Handling
 
 ## Getting Started
 
@@ -26,4 +38,4 @@ To start contributing, navigate to your XAMPP/htdocs folder and clone this repo:
 git clone https://github.com/MoAls18/5518csqr-group2-2024.git
 
 ```
-
+Then create a new branch off of the dev branch to implement your features.
