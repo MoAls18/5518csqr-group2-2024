@@ -31,6 +31,8 @@ Our blog app also includes secure software development techniques to maintain th
 
 ## Getting Started
 
+### Contributing
+
 To start contributing, navigate to your XAMPP/htdocs folder and clone this repo:
 
 ```bash
@@ -39,3 +41,8 @@ git clone https://github.com/MoAls18/5518csqr-group2-2024.git
 
 ```
 Then create a new branch off of the dev branch to implement your features.
+
+### Importing Database
+1. go to [phpmyadmin](localhost/phpmyadmin)
+2. create a new database and name it `blog`
+3. Click on import and navigate to `data/blog.sql`
