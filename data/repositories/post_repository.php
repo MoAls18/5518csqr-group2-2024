@@ -29,6 +29,7 @@ class PostRepository
      **/
     public function addPost(Post $post): void
     {
+        //TODO: Add error handling for invalid author_id.
         $query = "INSERT INTO posts (title, content, author_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("ssiss", $post->getTitle(), $post->getContent(), $post->getAuthorID(), $post->getCreatedAt(), $post->getUpdatedAt());
@@ -105,9 +106,16 @@ class PostRepository
             created_at: $post_data['created_at'],
             updated_at: $post_data['updated_at']
         );
+
         return $post;
     }
+    public function updateTitle(Post $post, string $title): void
+    {
+        $query = "UPDATE posts SET title = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("si", $title, $post->getID());
+        $stmt->execute();
 
-
+    }
   
 }
