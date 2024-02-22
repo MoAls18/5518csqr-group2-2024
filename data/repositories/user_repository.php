@@ -128,6 +128,16 @@ class UserRepository
         $stmt->bind_param("si", $password, $user->getId());
         $stmt->execute();
     }
+    public function userExists(int $id): bool
+    {
+        $query = "SELECT COUNT(*) FROM users WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $count = $result->fetch_row()[0];
+        return $count > 0;
+    }
 }
 
 ?>
