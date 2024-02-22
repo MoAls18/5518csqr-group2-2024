@@ -117,5 +117,21 @@ class PostRepository
         $stmt->execute();
 
     }
+
+    public function updateContent(Post $post, string $content): void 
+    {
+        $query = "UPDATE posts SET content = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("si", $content, $post->getID());
+        $stmt->execute();
+    }
+    
+    public function deletePost(Post $post): void
+    {
+        $query = "DELETE FROM posts WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $post->getID());
+        $stmt->execute();
+    }
   
 }
