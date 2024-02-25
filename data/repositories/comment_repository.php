@@ -78,8 +78,8 @@ class CommentRepository
             created_at: $comment_data['created_at'],
             updated_at: $comment_data['updated_at']
         );
+
          return $comment;
-        
     }
   
 }
