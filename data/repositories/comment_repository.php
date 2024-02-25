@@ -53,9 +53,33 @@ class CommentRepository
      * @param  int $id ID of the comment
      * @return Comment
      **/
-    public function getCommentById(int $id)
+    public function getCommentById(int $id): Comment
     {
-        // code...
+        // parameterized query to get all data to create a Comment object
+        $query = "SELECT id, content, user_id, post_id, created_at, updated_at FROM comments WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        $result = $stmt->get_result(); // gets the result set of the executed statement
+
+        // returns null if the result set is empty
+        if ($result->num_rows == 0) {
+            return null;
+        }
+        
+        // Create a Comment object from the result set
+        $comment_data = $result->fetch_assoc();
+        $comment = new Comment(
+            id: $comment_data['id'],
+            content: $comment_data['content'],
+            user_id: $comment_data['user_id'],
+            post_id: $comment_data['post_id'],
+            created_at: $comment_data['created_at'],
+            updated_at: $comment_data['updated_at']
+        );
+         return $comment;
+        
     }
   
 }
