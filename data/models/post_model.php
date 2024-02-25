@@ -19,28 +19,61 @@ class Post
         $this->updated_at = $updated_at;
     }
 
+    /**
+     * Gets the ID of the Post object.
+     *
+     * @return int
+     */
     public function getID(): int
     {
         return $this->id;
     }
 
+    /**
+     * Gets the title of the Post object.
+     *
+     * @return string
+     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
+    /**
+     * Gets the content of the Post object.
+     *
+     * @return string
+     */
     public function getContent(): string
     {
         return $this->content;
     }
+
+    /**
+     * Gets the author id of the Post object.
+     *
+     * @return int
+     */
     public function getAuthorID(): int
     {
         return $this->author_id;
     }
+
+    /**
+     * Gets the time the post was created at. 
+     *
+     * @return string
+     */
     public function getCreatedAt(): string
     {
         return $this->created_at;
     }
+
+    /**
+     * Gets the time the post was updated at. 
+     *
+     * @return string
+     */
     public function getUpdatedAt(): string
     {
         return $this->updated_at;
