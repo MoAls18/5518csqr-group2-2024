@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * User Class
+ *
+ * This class represents a model of a record of a user from the users table in 
+ * the database.
+ */
 class User
 {
   
