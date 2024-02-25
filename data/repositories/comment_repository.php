@@ -81,5 +81,39 @@ class CommentRepository
 
          return $comment;
     }
-  
+    
+    /**
+     * Update Comment content. 
+     *
+     * This function takes in a Comment object and a content string and updates 
+     * the record in the database.
+     *
+     * @param  Comment $comment The Comment object to modified.
+     * @param  string  $content The updated content.
+     * @return void
+     **/
+    public function updateComment(Comment $comment, string $content): void
+    {
+        $query = "UPDATE comments SET content = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("si", $content, $comment->getId());
+        $stmt->execute();
+    }
+
+    /**
+     * Delete comment from database.
+     *
+     * This function takes in a comment and deletes it from the database.
+     *
+     * @param  Comment $comment comment to be deleted.
+     * @return void
+     */
+    public function deleteComment(Comment $comment): void
+    {
+        $query = "DELETE FROM comments WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $comment->getId());
+        $stmt->execute();
+    }
+
 }
