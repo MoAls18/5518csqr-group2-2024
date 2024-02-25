@@ -27,27 +27,61 @@ class User
         $this->updated_at = $updated_at;
     }
 
+    /**
+     * Gets Id of the user.
+     *
+     * @return int
+     */
     public function getId(): int
     {
         return $this->id;
     }
     
+    /**
+     * Gets the username of the User
+     *
+     * @return string
+     */
     public function getUsername(): string
     {
         return $this->username;
     }
+
+    /**
+     * Gets the hashed password of the User
+     *
+     * @return string
+     */
     public function getPassword(): string
     {
         return $this->password;
     }
+
+    /**
+     * Gets the email of the User
+     *
+     * @return string
+     */
     public function getEmail(): string
     {
         return $this->email;
     }
+
+    /**
+     * Gets the time the User was created.
+     *
+     * @return string
+     */
     public function getCreatedAt(): string
     {
         return $this->created_at;
     }
+
+    /**
+     * Gets the time the User information was updated.
+     *
+     * @return string
+     */
     public function getUpdatedAt(): string
     {
         return $this->updated_at;
