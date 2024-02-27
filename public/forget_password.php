@@ -22,8 +22,8 @@ function send_new_password($get_email,$token){
         $mail->isSMTP();                                            //Send using SMTP
         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-        $mail->Username   = 'k.alemadi.01@gmail.com';                     //SMTP username
-        $mail->Password   = 'iaipizurizxmrnjp';                               //SMTP password
+        $mail->Username   = 'coursework047@gmail.com';                     //SMTP username
+        $mail->Password   = 'xgwmxhpoxwidwjxb';                               //SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
         //Recipients
