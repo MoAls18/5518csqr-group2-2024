@@ -1,6 +1,6 @@
 <?php
 
-
+//we use the rquire once to move the functions fron the config file to this file //
 require_once "config.php";
 
 if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['repeat'])) {
@@ -46,9 +46,9 @@ if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['passwor
 	<html>
 
 	<head>
-		<link rel="stylesheet" href="./css/style.css">
+		<link rel="stylesheet" href="./css/style.css"> 
 	</head>
-
+<!-- class login-container is a function that i built to use the css code into this block of the code -->
 	<body>
 		<div class="login-container">
 			<h2>Sign Up</h2>
@@ -80,11 +80,7 @@ if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['passwor
 					</div>
 					<div class="form-group">
 						Already have an account?
-					</div>
-					<div class="form-group">
-						<a href="login.php">
-							<input type="button" value="Sign in" />
-						</a>
+						<a href="login.php">log in</a> here
 					</div>
 			</form>
 		</div>
