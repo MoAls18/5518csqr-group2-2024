@@ -55,6 +55,7 @@ class UserRepository
         $user = new User(
             id: $user_data['id'],
             username: $user_data['username'],
+            token_number: null, // exposing the token number could lead to vulnerabilities.
             email: $user_data['email'],
             password: null, // password is set to null as retrieving the password in plaintext is a security risk
             created_at:$user_data['created_at'],
@@ -89,6 +90,7 @@ class UserRepository
         $user = new User(
             id: $user_data['id'],
             username: $user_data['username'],
+            token_number: null, // exposing the token number could lead to vulnerabilities.
             email: $user_data['email'],
             password: null, // password is set to null as retrieving the password in plaintext is a security risk
             created_at:$user_data['created_at'],
