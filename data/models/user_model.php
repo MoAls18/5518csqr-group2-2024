@@ -11,6 +11,7 @@ class User
   
     private $id;
     private $username;
+    private $token_number;
     private $email;
     private $password;
     private $created_at;
@@ -19,15 +20,17 @@ class User
     /**
      * @param int    $id
      * @param string $username
+     * @param string $token_number
      * @param string $email
      * @param string $password
      * @param string $created_at
      * @param string $updated_at
      */
-    public function __construct($id, $username, $email, $password, $created_at, $updated_at)
+    public function __construct($id, $username, $token_number ,$email, $password, $created_at, $updated_at)
     {
         $this->id = $id;
         $this->username = $username;
+        $this->token_number = $token_number;
         $this->email = $email;
         $this->password = $password;
         $this->created_at = $created_at;
@@ -52,6 +55,14 @@ class User
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+    /**
+     * Gets the password reset token associated with the user.
+     */
+    public function getTokenNumber(): string
+    {
+        return $this->token_number;
     }
 
     /**
