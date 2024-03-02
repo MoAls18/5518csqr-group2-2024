@@ -1,11 +1,6 @@
 <?php
 require_once "config.php";
 
-// use PHPMailer\PHPMailer\SMTP;
-// use PHPMailer\PHPMailer\Exception;
-
-//Load Composer's autoloader
-// require '../vendor/autoload.php';
 require "../vendor/phpmailer/phpmailer/src/PHPMailer.php";
 require "../vendor/phpmailer/phpmailer/src/SMTP.php";
 require "../vendor/phpmailer/phpmailer/src/Exception.php";
