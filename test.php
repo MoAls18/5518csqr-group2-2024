@@ -1,10 +1,10 @@
 <?php 
-if(isset($_SESSION["anything"])){
-$test =$_SESSION["anything"];
- echo "the value in session $test ";
+if(isset($_SESSION["anything"])) {
+    $test =$_SESSION["anything"];
+    echo "the value in session $test ";
 
 }
-if(isset($_POST["myinput"])){
+if(isset($_POST["myinput"])) {
     $myinput = $_POST["myinput"];
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
@@ -19,12 +19,8 @@ if(isset($_POST["myinput"])){
 <body>
 <form action = "test.php" method = "post">
 
-<input type = "text" name = "myinput" > 
-
-</input>
-<input type = "submit" value = "test" > 
-
-</input>
-</from>
+<input type = "text" name = "myinput" > </input>
+<input type = "submit" value = "test" > </input>
+</form>
 </body>
 </html>
