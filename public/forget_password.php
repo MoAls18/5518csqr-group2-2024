@@ -1,20 +1,22 @@
 <?php
 require_once "config.php";
 
+require "../vendor/phpmailer/phpmailer/src/PHPMailer.php";
+require "../vendor/phpmailer/phpmailer/src/SMTP.php";
+require "../vendor/phpmailer/phpmailer/src/Exception.php";
+
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
 
-//Load Composer's autoloader
-require 'vendor/autoload.php';
 
-function send_new_password($get_email,$token){
+function send_new_password($get_email,$token)
+{
     //Import PHPMailer classes into the global namespace
     //These must be at the top of your script, not inside a function
 
     
     //Create an instance; passing `true` enables exceptions
     $mail = new PHPMailer(true);
+    
     //iaip izur izxm rnjp
     try {
         //Server settings
@@ -22,8 +24,8 @@ function send_new_password($get_email,$token){
         $mail->isSMTP();                                            //Send using SMTP
         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-        $mail->Username   = 'k.alemadi.01@gmail.com';                     //SMTP username
-        $mail->Password   = 'iaipizurizxmrnjp';                               //SMTP password
+        $mail->Username   = 'coursework047@gmail.com';                     //SMTP username
+        $mail->Password   = 'xgwmxhpoxwidwjxb';                               //SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
         //Recipients
@@ -64,11 +66,10 @@ if (isset($_POST['email'])) {
         $get_email = $row['email'];
         //u
         $new_token = "UPDATE users SET token_number = '$token' where email = '$get_email' LIMIT 1";
-        $token_run = mysqli_query($conn,$new_token);
+        $token_run = mysqli_query($conn, $new_token);
 
-        if($token_run )
-        {
-            send_new_password($get_email,$token);
+        if($token_run ) {
+            send_new_password($get_email, $token);
         }
     }
 }

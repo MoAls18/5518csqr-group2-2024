@@ -1,4 +1,7 @@
-<?php
+<?php 
+if(isset($_SESSION["anything"])) {
+    $test =$_SESSION["anything"];
+    echo "the value in session $test ";
 
 $curl = curl_init();
 
@@ -28,3 +31,26 @@ if ($err) {
 } else {
     echo $response;
 }
+<<<<<<< HEAD
+=======
+if(isset($_POST["myinput"])) {
+    $myinput = $_POST["myinput"];
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    $_SESSION["anything"] = $myinput;
+}
+
+
+?>
+
+<html>
+<body>
+<form action = "test.php" method = "post">
+
+<input type = "text" name = "myinput" > </input>
+<input type = "submit" value = "test" > </input>
+</form>
+</body>
+</html>
+>>>>>>> a1eed4c60c484c5e51d74b19e2a53eca437201ef
