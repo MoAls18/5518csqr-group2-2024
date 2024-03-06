@@ -1,5 +1,5 @@
 <?php
-require_once "../models/user_model.php";
+require __DIR__ . "/../models/user_model.php";
 
 class UserRepository
 {
@@ -25,7 +25,13 @@ class UserRepository
     {
         $query = "INSERT INTO users(username, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sssss", $user->getUsername(), $user->getEmail(), $user->getPassword(), $user->getCreatedAt(), $user->getUpdatedAt());
+        $username = $user->getUsername();
+        $email = $user->getEmail();
+        $password = $user->getPassword();
+        $created_at = $user->getCreatedAt();
+        $updated_at = $user->getUpdatedAt();
+
+        $stmt->bind_param("sssss", $username, $email, $password, $created_at, $updated_at);
         return $stmt->execute();
     }
 
@@ -108,27 +114,43 @@ class UserRepository
      * @param  int $id id of the User
      * @return void
      **/
-    public function deleteUserById(int $id): void
+    public function deleteUserById(int $id): bool
     {
         $query = "DELETE FROM users WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $id);
         $stmt->execute();
+        
+        if ($stmt->affected_rows > 0) {
+            return true;
+        }
+        return false;
     }
-    public function deleteUserByUsername(string $username): void
+    public function deleteUserByUsername(string $username): bool
     {
         $query = "DELETE FROM users WHERE username = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $username);
         $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            return true;
+        }
+        return false;
     }
 
-    public function updateUserPassword(User $user, string $password): void
+    public function updateUserPassword(User $user, string $password): bool
     {
+        $userId = $user->getId();
         $query = "UPDATE users SET password = ? WHERE id = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("si", $password, $user->getId());
+        $stmt->bind_param("si", $password, $userId);
         $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            return true;
+        }
+        return false;
     }
     public function userExists(int $id): bool
     {
