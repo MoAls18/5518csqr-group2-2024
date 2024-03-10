@@ -1,45 +1,16 @@
 <?php
 
 //we use the rquire once to move the functions fron the config file to this file //
-require_once "config.php";
+require_once "../app/controllers/user_controller.php";
 
 if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['repeat'])) {
 	$email = $_POST['email'];
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 	$repeat = $_POST['repeat'];
-
-	if (strlen($email) < 1 || strlen($email) > 100) {
-		if (strlen($email) < 1)
-			echo "email length too short";
-		else
-			echo "email length too long";
-		exit();
-	} else if (strpos($email, '@') == false) {
-		echo "email syntax invalid";
-		exit();
-	} else if (strlen($password) < 8) {
-		echo "password length too short";
-		exit();
-	} else if ($password !== $repeat) {
-		echo "your passwords dont mathch";
-		exit();
-	}
-
-	$hashing = password_hash($password, PASSWORD_DEFAULT);
-
-	if ($stmt = $conn->prepare("INSERT INTO users(email,username, password) VALUES (?,?,?)")) {
-
-		$stmt->bind_param("sss", $email, $username, $hashing);
-		$stmt->execute();
-
-		if ($stmt->insert_id == 0) {
-			echo "data error";
-			exit();
-		}
-		$stmt->close();
-		echo "user registered successfully! ";
-	}
+	$userController = new UserController();
+	$userController->createUser($email, $username, $password, $repeat);
+	
 }
 ?>
 <DOCTYPE html>

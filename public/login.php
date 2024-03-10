@@ -1,35 +1,29 @@
 <?php
-
+require_once "../app/controllers/user_controller.php";
+session_start();
 // Check if user is already logged in, redirect to home page if true
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     //what is the use of header
-    header("location: index.php");
-    exit;
+    echo '<script>alert("You are already logged in!")
+    window.location.href="index.php";
+    </script>'; 
 }
-
-require_once "config.php";
-
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
-
-    // Retrieve the hashed password from the database
-    $query = "SELECT username,password, email FROM users WHERE username = ?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "s", $username);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $username, $hashed_password, $email);
-    mysqli_stmt_fetch($stmt);
-    mysqli_stmt_close($stmt);
+    $userController = new UserController();
+	$user = $userController->getUser($username);
+    
 
     // Verify the password
-    if (password_verify($password, $hashed_password)) {
-        session_start();
+    if (password_verify($password, $user->getPassword())) {
         // Store data in session variables
         $_SESSION["loggedin"] = true;
-        $_SESSION["username"] = $username;
-        $_SESSION["email"] = $email;
+        $_SESSION["username"] = $user->getUsername();
+        $_SESSION["email"] = $user->getEmail();
+        $_SESSION["userId"] = $user->getId();
+        
         // Redirect user to home page
         header("location: index.php");
     } else {

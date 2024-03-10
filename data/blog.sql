@@ -58,7 +58,7 @@ CREATE TABLE `posts` (
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(30) NOT NULL,
   `token_number` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
