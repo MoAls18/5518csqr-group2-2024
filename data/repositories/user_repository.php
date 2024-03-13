@@ -1,5 +1,5 @@
 <?php
-require_once "../models/user_model.php";
+require __DIR__ . "/../models/user_model.php";
 
 class UserRepository
 {

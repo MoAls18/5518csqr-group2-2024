@@ -27,13 +27,13 @@ class PostRepository
      * @param  Post $post A Post object.
      * @return void 
      **/
-    public function addPost(Post $post): void
+    public function addPost(Post $post): bool
     {
         //TODO: Add error handling for invalid author_id.
         $query = "INSERT INTO posts (title, content, author_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("ssiss", $post->getTitle(), $post->getContent(), $post->getAuthorID(), $post->getCreatedAt(), $post->getUpdatedAt());
-        $stmt->execute();
+        return $stmt->execute();
     }
 
     /**
