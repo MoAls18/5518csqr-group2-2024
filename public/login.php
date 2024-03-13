@@ -1,6 +1,6 @@
 <?php
 require_once "../app/controllers/user_controller.php";
-session_start();
+//session_start();
 // Check if user is already logged in, redirect to home page if true
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     //what is the use of header

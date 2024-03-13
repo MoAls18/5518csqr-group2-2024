@@ -2,7 +2,7 @@
 require_once "../app/helpers/util_functions.php";
 $utilFunctions = new UtilFunctions();
 $quotes = $utilFunctions->getNewQuoteFromApi();
-session_start();
+
 if (isset($_SESSION["username"])) {
 	$user = $_SESSION["username"];
 	echo "the person in session is $user ";

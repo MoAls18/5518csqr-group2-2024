@@ -26,12 +26,18 @@ class UserService
     }
     
     public function addUser($email, $username, $password, $repeat): bool{
+        $userExists = $this->userRepository->userExists($username,$email);
+        if($userExists){
+            echo "Error: username or email already exists try another one";
+            return false;
+        }else{
         $this->userValidator->verifyUserCreation($email, $username, $password, $repeat);
         $current_timestamp = date(format: "Y-m-d H:i:s");
         $hashing = password_hash($password, PASSWORD_DEFAULT);
         $user = new User(rand(), $username, $email, $hashing, $current_timestamp, $current_timestamp);
-
         return $this->userRepository->addUser($user);
+    }
+
     }
 
     public function getUserByUsername($username){

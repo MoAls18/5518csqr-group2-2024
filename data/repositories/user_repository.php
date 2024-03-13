@@ -198,11 +198,11 @@ class UserRepository
         return $result;
     }
     
-    public function userExists(int $id): bool
+    public function userExists(string $username, string $email): bool
     {
-        $query = "SELECT COUNT(*) FROM users WHERE id = ?";
+        $query = "SELECT COUNT(*) FROM users WHERE username = ? and email = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $id);
+        $stmt->bind_param("ss", $username, $email);
         $stmt->execute();
         $result = $stmt->get_result();
         $count = $result->fetch_row()[0];

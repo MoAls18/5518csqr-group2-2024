@@ -64,7 +64,8 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  CONSTRAINT UC_User UNIQUE (`username`, `email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
