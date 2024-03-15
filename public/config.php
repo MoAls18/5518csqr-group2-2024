@@ -9,7 +9,6 @@ define('DB_NAME', 'coursework');
 $conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, 3308);
 
 // Check connection
-if($conn === false) {
+if ($conn === false) {
     die("ERROR: Could not connect. " . mysqli_connect_error());
 }
-?>

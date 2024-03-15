@@ -26,7 +26,7 @@ class User
      * @param string $created_at
      * @param string $updated_at
      */
-    public function __construct($id, $username, $token_number ,$email, $password, $created_at, $updated_at)
+    public function __construct($id, $username ,$token_number, $email, $password, $created_at, $updated_at)
     {
         $this->id = $id;
         $this->username = $username;
@@ -36,6 +36,7 @@ class User
         $this->created_at = $created_at;
         $this->updated_at = $updated_at;
     }
+    
 
     /**
      * Gets Id of the user.
