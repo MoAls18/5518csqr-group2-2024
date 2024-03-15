@@ -51,10 +51,10 @@ class UserRepositoryTest extends TestCase
 
         // test user data
         $current_timestamp = date(format: "Y-m-d H:i:s");
-        $testUsername = "username";
+        $testUsername = "username2";
         $testPass = "password";
         $testEmail = "e@email.com";
-        $testToken = "12345";
+        $testToken = "123456";
         $testId = null;
     
         $testUser = new User(id: $testId, username: $testUsername, password: $testPass, token_number: $testToken, email: $testEmail, created_at: $current_timestamp, updated_at: $current_timestamp);
@@ -76,7 +76,7 @@ class UserRepositoryTest extends TestCase
 
         $result = $userRepository->getUserById(id: $testId);
 
-        $resultUserTest = new User(id: $testId, username: $testUsername, password: null, token_number: null, email: $testEmail, created_at: $current_timestamp, updated_at: $current_timestamp);
+        $resultUserTest = new User(id: $testId, username: $testUsername, password: "password", token_number: "12345", email: $testEmail, created_at: $current_timestamp, updated_at: $current_timestamp);
 
         $this->assertEqualsCanonicalizing($resultUserTest, $result, "FAILED: USERS DID NOT MATCH.");
     }
@@ -93,7 +93,7 @@ class UserRepositoryTest extends TestCase
         $testId = 1;
 
         $result = $userRepository->getUserByUsername(username: $testUsername);
-        $expected = new User(id: $testId, username: $testUsername, password: null, token_number: null, email: $testEmail, created_at: $current_timestamp, updated_at: $current_timestamp);
+        $expected = new User(id: $testId, username: $testUsername, password: "password", token_number: "12345", email: $testEmail, created_at: $current_timestamp, updated_at: $current_timestamp);
     
         $this->assertEqualsCanonicalizing($expected, $result, "FAILED: USERS DID NOT MATCH.");
     }
@@ -123,19 +123,11 @@ class UserRepositoryTest extends TestCase
         $conn = new mysqli(hostname: DB_HOST, username: DB_USER, password: DB_PASS, database: DB_NAME);
         $userRepository = new UserRepository(conn: $conn);
 
-        // test user data
-        $current_timestamp = date(format: "Y-m-d H:i:s");
-        $testUsername = "username";
-        $testPass = "password";
-        $testEmail = "e@email.com";
-        $testToken = "12345";
-        $testId = 1;
-    
-        $testUser = new User(id: $testId, username: $testUsername, password: $testPass, token_number: $testToken, email: $testEmail, created_at: $current_timestamp, updated_at: $current_timestamp);
         
+        $testusername = "username";
         $newPassword = "newpassword";
         
-        $result = $userRepository->updateUserPassword($testUser, $newPassword);
+        $result = $userRepository->updateUserPassword($testusername, $newPassword);
         $this->assertTrue($result);
     }
 
@@ -144,9 +136,24 @@ class UserRepositoryTest extends TestCase
         $conn = new mysqli(hostname: DB_HOST, username: DB_USER, password: DB_PASS, database: DB_NAME);
         $userRepository = new UserRepository(conn: $conn);
         
-        $testId = 1;
-        $result = $userRepository->userExists($testId);
+        $testuser = "username";
+        $testemail = "e@email.com";
+        $result = $userRepository->userExists($testuser, $testemail);
         $this->assertTrue($result);
       
+    }
+    public function testUpdateProfile(): void
+    {
+        $conn = new mysqli(hostname: DB_HOST, username: DB_USER, password: DB_PASS, database: DB_NAME);
+        $userRepository = new UserRepository(conn: $conn);
+
+        $newusername = "newuser";
+        $newemail = "newemail@email.com";
+
+        $result = $userRepository->updateProfile(1, $newusername, $newemail);
+        $testUserUsername = $userRepository->getUserById(1)->getUsername();
+        $testUserEmail = $userRepository->getUserById(1)->getEmail();
+        $resultlist = [$result, $testUserUsername, $testUserEmail];
+        $this->assertEqualsCanonicalizing([true, $newusername, $newemail], $resultlist);
     }
 }
