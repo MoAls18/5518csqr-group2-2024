@@ -27,11 +27,12 @@ class UserRepository
         $stmt = $this->conn->prepare($query);
         $username = $user->getUsername();
         $email = $user->getEmail();
-        $password = $user->getPassword();
-        $created_at = $user->getCreatedAt();
-        $updated_at = $user->getUpdatedAt();
 
-        $stmt->bind_param("sssss", $username, $email, $password, $created_at, $updated_at);
+        $password =  $user->getPassword();
+        $createdAt = $user->getCreatedAt();
+        $updatedAt =  $user->getUpdatedAt();
+        $stmt->bind_param("sssss", $username, $email , $password,$createdAt,$updatedAt);
+
         return $stmt->execute();
     }
 
@@ -81,7 +82,7 @@ class UserRepository
      **/
     public function getUserByUsername(string $username): User
     {
-        $query = "SELECT id, username, email, created_at, updated_at FROM users WHERE username = ?";
+        $query = "SELECT id, username,password, email, created_at, updated_at FROM users WHERE username = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("s", $username);
         $stmt->execute();
@@ -96,9 +97,59 @@ class UserRepository
         $user = new User(
             id: $user_data['id'],
             username: $user_data['username'],
-            token_number: null, // exposing the token number could lead to vulnerabilities.
             email: $user_data['email'],
-            password: null, // password is set to null as retrieving the password in plaintext is a security risk
+            password: $user_data['password'], // password is hashed password
+            created_at:$user_data['created_at'],
+            updated_at: $user_data['updated_at']
+        );
+
+        return $user;
+    }
+    
+    public function getUserByEmail(string $email): User
+    {
+        $query = "SELECT id, username,password, email, created_at, updated_at FROM users WHERE email = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 0) {
+            return null;
+        }
+
+        $user_data = $result->fetch_assoc();
+
+        $user = new User(
+            id: $user_data['id'],
+            username: $user_data['username'],
+            email: $user_data['email'],
+            password: $user_data['password'], // password is hashed password
+            created_at:$user_data['created_at'],
+            updated_at: $user_data['updated_at']
+        );
+
+        return $user;
+    }
+    public function getUserByTokenNumber(string $token): User
+    {
+        $query = "SELECT id, username,password, email, created_at, updated_at FROM users WHERE token_number = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("s", $token);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 0) {
+            return null;
+        }
+
+        $user_data = $result->fetch_assoc();
+
+        $user = new User(
+            id: $user_data['id'],
+            username: $user_data['username'],
+            email: $user_data['email'],
+            password: $user_data['password'], // password is hashed password
             created_at:$user_data['created_at'],
             updated_at: $user_data['updated_at']
         );
@@ -139,28 +190,56 @@ class UserRepository
         return false;
     }
 
-    public function updateUserPassword(User $user, string $password): bool
-    {
-        $userId = $user->getId();
-        $query = "UPDATE users SET password = ? WHERE id = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("si", $password, $userId);
-        $stmt->execute();
 
-        if ($stmt->affected_rows > 0) {
-            return true;
-        }
-        return false;
-    }
-    public function userExists(int $id): bool
+    public function updateUserPassword(string $username, string $password): bool
     {
-        $query = "SELECT COUNT(*) FROM users WHERE id = ?";
+        $query = "UPDATE users SET password = ? WHERE username = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $id);
+        $stmt->bind_param("ss", $password, $username);
+        $result = $stmt->execute();
+        $stmt->close();
+        return $result;
+
+    }
+
+    public function updateUserToken(User $user, string $token): bool
+    {
+        $query = "UPDATE users SET token_number = ? WHERE username = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ss", $token, $user->getUsername());
+        $result = $stmt->execute();
+        $stmt->close();
+        return $result;
+    }
+    
+    public function userExists(string $username, string $email): bool
+    {
+        $query = "SELECT COUNT(*) FROM users WHERE username = ? and email = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ss", $username, $email);
         $stmt->execute();
         $result = $stmt->get_result();
         $count = $result->fetch_row()[0];
         return $count > 0;
+    }
+
+    public function updateProfile($userId, $username, $email) {
+
+        $query = "UPDATE users SET";
+
+        if ($username !== '') {
+            $query .= " username='$username'";
+        }
+        if ($email !== '') {
+            $query .= ", email='$email'";
+        }
+
+        $query .= " WHERE id=$userId";
+        if ($this->conn->query($query) === TRUE) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
