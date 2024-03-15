@@ -23,15 +23,15 @@ class UserRepository
      **/
     public function addUser(User $user): bool
     {
-        $query = "INSERT INTO users(username, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO users(username, email,token_number, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
         $username = $user->getUsername();
         $email = $user->getEmail();
-
+        $token_number = $user->getTokenNumber();
         $password =  $user->getPassword();
         $createdAt = $user->getCreatedAt();
         $updatedAt =  $user->getUpdatedAt();
-        $stmt->bind_param("sssss", $username, $email , $password,$createdAt,$updatedAt);
+        $stmt->bind_param("ssssss", $username,  $email, $token_number, $password, $createdAt, $updatedAt);
 
         return $stmt->execute();
     }
@@ -47,7 +47,7 @@ class UserRepository
     public function getUserById(int $id): User
     {
 
-        $query = "SELECT id, username, email, created_at, updated_at FROM users WHERE id = ?";
+        $query = "SELECT id, username, password, token_number, email, created_at, updated_at FROM users WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -62,9 +62,9 @@ class UserRepository
         $user = new User(
             id: $user_data['id'],
             username: $user_data['username'],
-            token_number: null, // exposing the token number could lead to vulnerabilities.
+            token_number: $user_data['token_number'],
             email: $user_data['email'],
-            password: null, // password is set to null as retrieving the password in plaintext is a security risk
+            password: $user_data['password'], // password is hashed password
             created_at:$user_data['created_at'],
             updated_at: $user_data['updated_at']
         );
@@ -82,7 +82,7 @@ class UserRepository
      **/
     public function getUserByUsername(string $username): User
     {
-        $query = "SELECT id, username,password, email, created_at, updated_at FROM users WHERE username = ?";
+        $query = "SELECT id, username, password, token_number, email, created_at, updated_at FROM users WHERE username = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("s", $username);
         $stmt->execute();
@@ -97,6 +97,7 @@ class UserRepository
         $user = new User(
             id: $user_data['id'],
             username: $user_data['username'],
+            token_number: $user_data['token_number'],
             email: $user_data['email'],
             password: $user_data['password'], // password is hashed password
             created_at:$user_data['created_at'],
@@ -123,6 +124,7 @@ class UserRepository
         $user = new User(
             id: $user_data['id'],
             username: $user_data['username'],
+            token_number: $user_data['token_number'],
             email: $user_data['email'],
             password: $user_data['password'], // password is hashed password
             created_at:$user_data['created_at'],
@@ -148,6 +150,7 @@ class UserRepository
         $user = new User(
             id: $user_data['id'],
             username: $user_data['username'],
+            token_number: $user_data['token_number'],
             email: $user_data['email'],
             password: $user_data['password'], // password is hashed password
             created_at:$user_data['created_at'],
@@ -223,7 +226,8 @@ class UserRepository
         return $count > 0;
     }
 
-    public function updateProfile($userId, $username, $email) {
+    public function updateProfile($userId, $username, $email): bool
+    {
 
         $query = "UPDATE users SET";
 
@@ -235,7 +239,7 @@ class UserRepository
         }
 
         $query .= " WHERE id=$userId";
-        if ($this->conn->query($query) === TRUE) {
+        if ($this->conn->query($query) === true) {
             return true;
         } else {
             return false;
