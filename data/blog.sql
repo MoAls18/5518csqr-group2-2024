@@ -65,7 +65,6 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  CONSTRAINT PRIMARY KEY(id),
   CONSTRAINT UC_User UNIQUE (`username`, `email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -92,7 +91,8 @@ ALTER TABLE `posts`
 --
 -- Indexes for table `users`
 --
-
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
