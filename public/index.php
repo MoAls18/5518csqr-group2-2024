@@ -97,7 +97,6 @@ $quotes = $utilFunctions->getNewQuoteFromApi();
                     echo "<h2>" . $post->getTitle(). "</h2>";
                     echo "<p>" . $post->getContent() . "</p>";
                     echo "<p>Published on: " . $post->getCreatedAt(). "</p>";
-                    echo "<a href='view_post.php?id=" . $post->getID() . "' class='read-more'>Read More</a>";
                     echo "</div>";
                 }
             }else{
