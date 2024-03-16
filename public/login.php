@@ -1,6 +1,7 @@
 <?php
 require_once "../app/controllers/user_controller.php";
-//session_start();
+if(session_status() !== PHP_SESSION_ACTIVE) { session_start();
+}
 // Check if user is already logged in, redirect to home page if true
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     //what is the use of header
@@ -13,7 +14,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $userController = new UserController();
-	$user = $userController->getUser($username);
+    $user = $userController->getUser($username);
     
 
     // Verify the password
@@ -43,6 +44,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 </head>
 
 <body>
+<?php require 'navbar.php'; ?> <!-- Include the navbar here -->
     <div class="login-container">
         <h2>Login</h2>
         <form method="post" action="login.php">
@@ -53,6 +55,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
+            </div>
+            <div class = "form-group">
+            Forgot your password? <a href="forget_password.php">click here</a> 
             </div>
             <div class="form-group">
                 <input type="submit" value="Login">
