@@ -63,13 +63,13 @@ class PostRepository
 
         // create a Post object using the result from the query
         $post = new Post(
-            id: $post_data['id'],
             title: $post_data['title'],
             content: $post_data['content'],
             author_id: $post_data['author_id'],
             created_at: $post_data['created_at'],
             updated_at: $post_data['updated_at']
         );
+        $post->setID($post_data['id']);
 
         return $post;
 
@@ -186,6 +186,15 @@ class PostRepository
         $stmt->bind_param("si", $content, $post->getID()); // binds the parameters in the query
         $stmt->execute(); // runs the query
     }
+
+    public function updatePost(Post $post,string $title, string $content): bool 
+    {
+        // creates a query to update the post in the database with the new content
+        $query = "UPDATE posts SET title= ?, content = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ssi",$title, $content, $post->getID()); // binds the parameters in the query
+        return $stmt->execute(); // runs the query
+    }
     
     /**
      * Deletes the Post from the database.
@@ -195,13 +204,44 @@ class PostRepository
      * @param  Post $post
      * @return void
      */
-    public function deletePost(Post $post): void
+    public function deletePost(Post $post): bool
     {
         // parameterized query to delete the post with the specified id.
         $query = "DELETE FROM posts WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $post->getID());
-        $stmt->execute();
+        return $stmt->execute();
+    }
+
+    public function getAllPosts() {
+        $sql = "SELECT id, title, content, author_id, created_at, updated_at FROM posts ORDER BY created_at DESC";
+        $result = $this->conn->query($sql);
+
+        $posts = array();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $post = new Post( $row['title'], $row['content'], $row['author_id'], $row['created_at'], $row['updated_at']);
+                $post->setID($row['id']);
+                $posts[] = $post;
+            }
+        }
+        return $posts;
+    }
+  
+    public function getPostsByUserId($userId) {
+        $userId = $this->conn->real_escape_string($userId);
+        $sql = "SELECT id, title, content, created_at, updated_at FROM posts WHERE author_id = $userId ORDER BY created_at DESC";
+        $result = $this->conn->query($sql);
+
+        $posts = array();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $post = new Post($row['title'], $row['content'], $userId, $row['created_at'], $row['updated_at']); 
+                $post->setID($row['id']);
+                $posts[] = $post;
+            }
+        }
+        return $posts;
     }
   
 }
