@@ -34,7 +34,8 @@ class UserService
         }else{
             $this->userValidator->verifyUserCreation($email, $username, $password, $repeat);
             $current_timestamp = date(format: "Y-m-d H:i:s");
-            $user = new User(rand(), $username, $email, $password, $current_timestamp, $current_timestamp);
+            $hashing = password_hash($password, PASSWORD_DEFAULT);
+            $user = new User(rand(), $username, $email, $hashing, $current_timestamp, $current_timestamp);
             return $this->userRepository->addUser($user);
         }
 
