@@ -9,9 +9,8 @@ class Post
     private $created_at;
     private $updated_at;
 
-    public function __construct(int $id, string $title, string $content, int $author_id, string $created_at, string $updated_at)
+    public function __construct(string $title, string $content, int $author_id, string $created_at, string $updated_at)
     {
-        $this->id = $id;
         $this->title = $title;
         $this->content = $content;
         $this->author_id = $author_id;
@@ -78,4 +77,10 @@ class Post
     {
         return $this->updated_at;
     }
+
+    public function setID($id): void
+    {
+        $this->id = $id;
+    }
+    
 }
