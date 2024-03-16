@@ -1,11 +1,14 @@
 <?php
 
+if(session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 require_once "../app/controllers/user_controller.php";
 
 if (isset($_POST['email'])) {
     $email = $_POST['email'];
     $userController = new UserController();
-	$userController->resetPassword($email);
+    $userController->resetPassword($email);
 }
 ?>
 <html>
@@ -16,6 +19,7 @@ if (isset($_POST['email'])) {
 </head>
 
 <body>
+<?php require 'navbar.php'; ?> <!-- Include the navbar here -->
     <div class="login-container">
         <form action="forget_password.php" method="POST">
             <h4>Forgot your password? Please enter your email to recover it</h2>

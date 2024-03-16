@@ -1,8 +1,9 @@
 <?php
 
 require_once "../app/controllers/user_controller.php";
-
-session_start();
+if(session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 if (!(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true)) {
     echo '<script>alert("Please log in before accessing this page!")
     window.location.href="index.php";
@@ -39,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>User Profile</title>
     <link rel="stylesheet" href="./css/style.css">
 </head>
-
+<?php require 'navbar.php'; ?> <!-- Include the navbar here -->
 <body>
     <div class="login-container">
         <h2>User Profile</h2>
@@ -55,8 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="form-group">
             <a href="forget_password.php">
-   <input type="button" value="Change password" />
-</a>
+                <input type="button" value="Change password" />
+            </a>
             </div>
             <div class="form-group">
                 <input type="submit" value="Update">
