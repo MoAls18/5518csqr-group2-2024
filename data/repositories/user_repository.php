@@ -45,15 +45,22 @@ class UserRepository
     public function getUserById(int $id): User
     {
 
-        $query = "SELECT id, username, email, created_at, updated_at FROM users WHERE id = '" . $id . "'";
-        $stmt = $this->conn->execute_query($query);
+        $query = "SELECT id, username, email, created_at, updated_at FROM users WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
+        if ($result->num_rows == 0) {
+            return null;
+        }
 
-        $user_data = $stmt->fetch_assoc();
+        $user_data = $result->fetch_assoc();
 
         $user = new User(
             id: $user_data['id'],
             username: $user_data['username'],
+            token_number: null, // exposing the token number could lead to vulnerabilities.
             email: $user_data['email'],
             password: null, // password is set to null as retrieving the password in plaintext is a security risk
             created_at:$user_data['created_at'],
