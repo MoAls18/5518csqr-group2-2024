@@ -30,7 +30,7 @@ class UserRepository
         $password =  $user->getPassword();
         $createdAt = $user->getCreatedAt();
         $updatedAt =  $user->getUpdatedAt();
-        $stmt->bind_param("sssss", $username, $email , $password,$createdAt,$updatedAt);
+        $stmt->bind_param("sssss", $username, $email, $password, $createdAt, $updatedAt);
         return $stmt->execute();
     }
 
@@ -45,22 +45,15 @@ class UserRepository
     public function getUserById(int $id): User
     {
 
-        $query = "SELECT id, username, email, created_at, updated_at FROM users WHERE id = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $query = "SELECT id, username, email, created_at, updated_at FROM users WHERE id = '" . $id . "'";
+        $stmt = $this->conn->execute_query($query);
 
-        if ($result->num_rows == 0) {
-            return null;
-        }
 
-        $user_data = $result->fetch_assoc();
+        $user_data = $stmt->fetch_assoc();
 
         $user = new User(
             id: $user_data['id'],
             username: $user_data['username'],
-            token_number: null, // exposing the token number could lead to vulnerabilities.
             email: $user_data['email'],
             password: null, // password is set to null as retrieving the password in plaintext is a security risk
             created_at:$user_data['created_at'],
@@ -209,7 +202,8 @@ class UserRepository
         return $count > 0;
     }
 
-    public function updateProfile($userId, $username, $email) {
+    public function updateProfile($userId, $username, $email)
+    {
 
         $query = "UPDATE users SET";
 
@@ -221,7 +215,7 @@ class UserRepository
         }
 
         $query .= " WHERE id=$userId";
-        if ($this->conn->query($query) === TRUE) {
+        if ($this->conn->query($query) === true) {
             return true;
         } else {
             return false;
